@@ -72,7 +72,8 @@
 # 부모 폴더는 어디든 무방 (예시: ~/Source/Git)
 mkdir -p ~/Source/Git && cd ~/Source/Git
 
-# 1) 문서/계획 레포 (이 레포) — 원격이 정해지면 그 주소로 clone 한다
+# 1) 문서/계획 레포 (이 레포)
+git clone https://github.com/firex96/SKELETON.git
 
 # 2) 스켈레톤 코드 레포 (형제 위치에)
 git clone https://github.com/firex96/spring-boot-public-api-skeleton.git
