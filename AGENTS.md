@@ -80,7 +80,7 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 | 장치 | 목적 | 명령 |
 |---|---|---|
 | **A 발산 탐지** | 형제가 **서로 달라진 것** | `bash scripts/sibling-diff.sh` — 발산 있으면 exit 1 |
-| **B 복제 결함 탐지** | 형제가 **셋 다 똑같이 틀린 것** | `bash scripts/contract-coverage.sh --repo <public\|internal\|batch>` — 규약 표면에 그것을 지나가는 테스트가 있는지. 없거나 **실행되지 않으면** FAIL. public·internal 은 e2e 때문에 그 레포의 `docker compose up -d` 를 먼저 띄운다(세 compose 가 같은 호스트 포트를 써서 레포마다 하나씩 돌린다) |
+| **B 복제 결함 탐지** | 형제가 **셋 다 똑같이 틀린 것** | `bash scripts/contract-coverage.sh --repo <public\|internal\|batch>` — 규약 표면에 그것을 지나가는 테스트가 있는지. 없거나 **실행되지 않으면** FAIL. public·internal 은 e2e 때문에 그 레포의 `docker compose up -d` 를 먼저 띄운다(세 compose 가 같은 호스트 포트를 써서 레포마다 하나씩 돌린다). 6379 를 다른 컨테이너가 쓰고 있으면 `REDIS_PORT=6380 docker compose up -d` 처럼 바꿔 띄우고, 실행할 때도 같은 값을 준다(`REDIS_PORT=6380 bash scripts/contract-coverage.sh --repo public`) — compose 포트와 `local` 프로필의 `redis-port` 가 둘 다 이 변수를 읽는다 |
 
 정본 표는 [`docs/contract-surfaces.md`](docs/contract-surfaces.md) 다.
 
