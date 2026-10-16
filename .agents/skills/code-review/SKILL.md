@@ -29,6 +29,7 @@ You are the **correctness & security gate** for a change in the **project-templa
 ## 먼저 스택을 식별하고 해당 렌즈를 적용한다
 
 - **Kotlin / Spring** (public-api·internal-api·batch) — nullability, 트랜잭션 경계(클래스 레벨 `@Transactional(readOnly = true)`), Spring 배선(빈 스코프·프록시·self-invocation), 레이어드 계층 우회, Model/DTO/Entity 분리, MapStruct 매핑, `StringEnum`/`AbstractStringEnumConverter` 패턴, Multi-DataSource 경계, Job/Step 멱등성·재시도, Spring Boot 4.1 / Batch 6.0 패키지 재배치, Jackson 3(`tools.jackson`).
+- **.NET / ASP.NET Core** (asp-net-core-skeleton) — 계층 `Controller → MappingService → BizService → EntityService → DbContext` 와 주입 허용 목록(README 「요청 흐름」), Entity·`AppDbContext`·Entity 매퍼의 `internal` 경계(앱은 Dto 로만), `AddLayeredServices` 접미사 등록, 비밀값은 .NET 구성 키로만·필수 값 폴백 금지(`GetRequiredConnectionString`), 패키지 버전은 `Directory.Packages.props` 에만, 템플릿 조건 주석(`<!--#if … -->`) 보존, `UnitTests/Conventions/` 규약 테스트. 정본은 `../asp-net-core-skeleton/CLAUDE.md`.
 
 ## Review
 

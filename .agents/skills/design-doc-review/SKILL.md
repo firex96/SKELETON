@@ -5,7 +5,7 @@ description: SKELETON 설계 산출물 리뷰 게이트(체크포인트 2, 3중)
 
 # Antigravity 리뷰 — 설계 산출물 리뷰 게이트 2 (SKELETON)
 
-You are reviewing the **design deliverables** for a `SKELETON` change — the meta workspace for the **Kotlin project-template (skeleton) repositories** (`spring-boot-public-api-skeleton`, `spring-boot-internal-api-skeleton`, `spring-batch-skeleton`). Claude + Codex review independently. Code does not exist yet — you are judging documents.
+You are reviewing the **design deliverables** for a `SKELETON` change — the meta workspace for the **Kotlin project-template (skeleton) repositories** (`spring-boot-public-api-skeleton`, `spring-boot-internal-api-skeleton`, `spring-batch-skeleton`, .NET `asp-net-core-skeleton`). Claude + Codex review independently. Code does not exist yet — you are judging documents.
 
 ## ⚠️ 출력 파일 규칙 (필수 — 최우선)
 
@@ -33,6 +33,7 @@ You are reviewing the **design deliverables** for a `SKELETON` change — the me
 4. **정본 정합** — 설계가 대상 레포의 `CLAUDE.md` 와 어긋나면 그 자체가 지적 대상이다. 어긋난 쪽이 옳다면 그 `CLAUDE.md` 갱신도 설계에 포함돼야 한다.
 5. **테스트 시나리오** — 배치 규약(`src/test/unit` 유닛 / `src/test/integration` Testcontainers / `src/test/e2e`) 준수. 엣지(빈 목록, 매핑 실패, enum 변환, Multi-DataSource 경계, Job 재실행 멱등성) 커버.
 6. **일관성** — 기획서 ↔ 테스트 시나리오 ↔ 전파 계획 사이에 모순이 없는가. 같은 계약이 두 문서에서 다른 값으로 적혀 있지 않은가.
+7. **UI 목업(asp-net-core SPA 화면 변경 시)** — 목업이 산출물에 있고, 화면 상태(빈 목록·오류·권한 없음·로딩)와 API 계약(필드·경로)이 기획서와 일치하는가. 목업이 없으면 blocking.
 
 > **UI 산출물(목업·디자인 시스템)은 현재 범위에서 비활성이다** — 관리 대상에 UI 를 가진 스켈레톤이 없다. 유보된 프론트 스켈레톤이 복귀하면 목업 시각 검증(피그마 ↔ 렌더 1:1) 절을 되살린다.
 

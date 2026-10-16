@@ -21,6 +21,7 @@
 /spring-boot-public-api-skeleton
 /spring-boot-internal-api-skeleton
 /spring-batch-skeleton
+/asp-net-core-skeleton
 
 # 파이썬 바이트코드 — 리뷰 컨텍스트를 바이너리로 오염시킨다
 __pycache__/

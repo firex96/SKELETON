@@ -3,7 +3,8 @@
     "additionalDirectories": [
       "../spring-boot-public-api-skeleton",
       "../spring-boot-internal-api-skeleton",
-      "../spring-batch-skeleton"
+      "../spring-batch-skeleton",
+      "../asp-net-core-skeleton"
     ]
   },
   "env": {

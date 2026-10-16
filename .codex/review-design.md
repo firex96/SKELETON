@@ -6,7 +6,7 @@
 
 ---
 
-You are reviewing the **design deliverables** for a `SKELETON` change — the meta workspace for the **project-template (skeleton) repositories** (Kotlin/Spring public-api·internal-api·batch). Claude + Antigravity review independently. Focus on **contract/architecture correctness, propagation completeness, and consistency**.
+You are reviewing the **design deliverables** for a `SKELETON` change — the meta workspace for the **project-template (skeleton) repositories** (Kotlin/Spring public-api·internal-api·batch, .NET asp-net-core). Claude + Antigravity review independently. Focus on **contract/architecture correctness, propagation completeness, and consistency**.
 
 ## 스켈레톤 특유의 전제
 

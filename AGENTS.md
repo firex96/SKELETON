@@ -12,7 +12,7 @@ Codex 와 Antigravity 가 읽는 **SKELETON 워크스페이스 진입 지침**�
 
 **관리 대상 = 레포명에 `skeleton` 이 붙은 레포.** 새 스켈레톤 레포가 생기면 `CLAUDE.md`·`AGENTS.md`·`README.md` 의 관리 대상과 `.claude/settings.json` 의 `additionalDirectories`, 크로스리뷰 대상 `.claude/cross-review-siblings` 에 함께 등록한다.
 
-> 현재 관리 범위는 **Kotlin 3종**이다. `asp-net-core-skeleton`(공개판 기준 복귀 판정 전)과 `svelte-frontend-skeleton`(이 워크스페이스에 없음)은 **유보** 상태이며, 사유·복귀 조건은 [`docs/deferred-scope.md`](docs/deferred-scope.md) 에 있다.
+> 현재 관리 범위는 **Kotlin 3종 + ASP.NET Core 1종**(`asp-net-core-skeleton`)이다. asp-net-core 작업은 당분간 그 레포에서 직접 진행하고, 이 워크스페이스는 등록·크로스리뷰 대상 연결까지만 맡는다. `svelte-frontend-skeleton`(이 워크스페이스에 없음)은 **유보** 상태이며, 사유·복귀 조건은 [`docs/deferred-scope.md`](docs/deferred-scope.md) 에 있다.
 
 ### 스켈레톤이 일반 서비스 레포와 다른 점 (모든 판단의 전제)
 
@@ -29,7 +29,8 @@ Codex 와 Antigravity 가 읽는 **SKELETON 워크스페이스 진입 지침**�
 ├── SKELETON/                                     ← 이 레포 (plans·docs·계획) — 메타/전파 작업 진입점
 ├── spring-boot-public-api-skeleton/              ← 형제 (Kotlin 2.3 / Spring Boot 4.1 / JDK21, 대외 API)
 ├── spring-boot-internal-api-skeleton/            ← 형제 (Kotlin 2.3 / Spring Boot 4.1 / JDK21, 내부 API)
-└── spring-batch-skeleton/                        ← 형제 (Kotlin 2.3 / Spring Boot 4.1 / Spring Batch 6 / Quartz)
+├── spring-batch-skeleton/                        ← 형제 (Kotlin 2.3 / Spring Boot 4.1 / Spring Batch 6 / Quartz)
+└── asp-net-core-skeleton/                        ← 형제 (.NET · ASP.NET Core + SPA, `dotnet new` 템플릿)
 ```
 
 ### 에이전트 실행 경로
@@ -38,6 +39,7 @@ Codex 와 Antigravity 가 읽는 **SKELETON 워크스페이스 진입 지침**�
 |---|---|---|
 | 규약 변경·형제 스켈레톤 동시 반영·계획/설계 | `SKELETON/` | plans + 형제 스켈레톤 전부를 함께 확인 |
 | 단일 스켈레톤 내부 작업 | 해당 형제 레포 또는 `SKELETON/` | 해당 레포의 에이전트 지침과 규약 정본 `CLAUDE.md` 를 읽는다 |
+| asp-net-core 작업 | 당분간 `../asp-net-core-skeleton` | 그 레포의 에이전트 지침과 `CLAUDE.md` 가 정본. 이 레포는 크로스리뷰 대상 해석·관리 대상 등록만 맡는다 |
 
 - Claude Code 의 형제 레포 컨텍스트 설정은 `.claude/settings.json` `additionalDirectories` 등록 + `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` 이다. 다른 에이전트의 접근 권한이나 지침 로딩을 대신하지 않는다.
 - Kotlin 3종은 각자 `CLAUDE.md` 를 갖고 있고 **그 파일이 해당 스켈레톤 규약의 정본**이다. 형제 레포를 만지기 전에 해당 경로의 에이전트 지침과 `CLAUDE.md` 를 직접 읽고, 현재 세션의 접근 권한을 확인한다.
@@ -90,6 +92,8 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 
 형제 동기화는 장치 A·B 와 `rg` 스윕으로만 한다 — 파일을 복사하는 스크립트는 「셋 다 똑같이 틀린 것」을 퍼뜨리는 도구라 두지 않는다.
 
+**장치 A·B 와 복제 표면은 Kotlin 3종 전용이다.** `asp-net-core-skeleton` 은 같은 규약 계열(계층 `Controller → MappingService → BizService → EntityService`, 비밀값 출처 프로필, 테스트 3분류)이지만 언어가 달라 파일 대조 대상이 아니다. 규약을 개념 수준에서 바꾸는 변경이면 asp-net-core 를 **수동 대조 대상**으로 계획에 적고, 반영 여부를 hit 판정과 같은 형식(`반영 / 해당 없음 / 보류(사유)`)으로 남긴다.
+
 ## 작업 산출물 위치 (plans/)
 
 - **`plans/ing/<slug>/`** — 진행 중. 새 작업은 여기서 시작한다. 게이트 명령의 인자도 이 경로다: `bash .claude/scripts/cr-checkpoint3.sh plans/ing/<slug>/구현_설계.md`, `/cross-review ing/<slug>`(글로벌 스킬이 `plans/$1/` 를 조립하므로 슬러그에 `ing/` 를 붙인다).
@@ -112,6 +116,9 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 | Kotlin 통합 | `./gradlew integrationTest` (**Docker 필요** — Testcontainers MySQL) |
 | Kotlin 전체 | `./gradlew check` — `ktlint + test + integrationTest` (3종 공통) |
 | Kotlin e2e | `./gradlew e2eTest` — public-api·internal-api, `docker compose up -d` 선행, `check` 에 묶지 않는다 |
+| .NET | `dotnet build AspNetCoreSkeletonApplication.slnx` → `dotnet test --solution AspNetCoreSkeletonApplication.slnx` (IntegrationTests 는 **Docker 필요**) |
+| .NET SPA | 바꾼 `src/spa/<클라이언트>` 에서 `npm ci && npm run build && npm test` (Angular 는 `npm test -- --watch=false`) |
+| .NET 템플릿 | 템플릿 조건 주석·`.template.config` 를 바꿨으면 custom hive 로 `dotnet new install . --debug:custom-hive <임시>` → `dotnet new aspnet-spa-skeleton …` 실생성 확인 |
 
 - 특정 테스트만: `./gradlew test --tests "com.rex.<module>.skeleton.*TestClassName"` · `./gradlew integrationTest --tests "*IntegrationTest"`.
 - 형제 레포별 세부 명령·주의사항의 정본은 **각 레포 `CLAUDE.md`** 다. 이 표와 어긋나면 형제 레포 쪽이 이긴다(그리고 이 표를 고친다).
@@ -149,6 +156,10 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 - **Model / DTO / Entity 분리** — Entity 는 상위 계층에 노출 금지. 변환은 MapStruct.
 - **트랜잭션** — 클래스 레벨 `@Transactional(readOnly = true)` 기본, 변경 메서드에만 `@Transactional`. **모든 `@Transactional` 에 `transactionManager` 명시(primary 포함)** — 데이터소스가 여럿이라 묵시는 primary 로 가고, 다른 데이터소스의 리포지토리는 그 트랜잭션 밖에서 돈다(`@Modifying` 예외·파생 `deleteBy…` 조용한 무효·커넥션 2개). 경계는 BizService·EntityService(MappingService 금지). 검출 `TransactionManagerConventionTest`(3레포). **`@Async` 도 같은 프록시 규칙** — 같은 클래스 안 호출은 동기로 돈다. 비동기는 별도 빈(`ExampleAsyncProxyWorker`)으로. 검출 `AsyncSelfInvocationConventionTest`(public·internal).
 - **String Enum** — `StringEnum` 인터페이스 + `AbstractStringEnumConverter`(JPA) + `StringEnumUtil.fromValue()`.
+
+### .NET (asp-net-core-skeleton)
+
+- 규칙의 정본은 [`../asp-net-core-skeleton/CLAUDE.md`](../asp-net-core-skeleton/CLAUDE.md) 와 그 README 「코딩 규약」·「요청 흐름」이다. 이 문서에는 요약 사본을 두지 않는다.
 
 ### 스택 주의
 
@@ -290,7 +301,7 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 - **main 의 PASS 가 R2/R3 의 FAIL 을 덮지 못한다.**
 - entry point 는 글로벌 `/cross-review` 계약(`~/.claude/skills/cross-review/SKILL.md`) + 이 레포의 `.claude/scripts/cr-checkpoint3.sh`(③ attestation). 전용 entry point 를 따로 두지 않는다.
 
-**4-체크포인트**: ①설계 계획(R2+R3) → ②설계 산출물(R1+R2+R3) → ③구현 계획(R2+R3) → ④구현 산출물 코드·보안(R1+R2+R3)/런타임(R1+R3). **현재 범위에는 UI 스켈레톤이 없어 UI 산출물(목업·디자인 시스템)은 비활성이다** — 유보 레포 복귀 시 되살린다. 상세·티어링·폴백은 `CROSS-REVIEW.md`.
+**4-체크포인트**: ①설계 계획(R2+R3) → ②설계 산출물(R1+R2+R3) → ③구현 계획(R2+R3) → ④구현 산출물 코드·보안(R1+R2+R3)/런타임(R1+R3). **UI 산출물(목업)은 asp-net-core SPA 화면을 바꾸는 작업에서만 ② 에 포함한다** — Kotlin 3종에는 UI 가 없다. 상세·티어링·폴백은 `CROSS-REVIEW.md`.
 
 ## 공통 제약
 

@@ -6,7 +6,7 @@
 
 관리 대상 판정 기준은 단순합니다: **레포명에 `skeleton` 이 붙은 레포.** 새 스켈레톤 레포가 생기면 아래 표, [`CLAUDE.md`](CLAUDE.md), [`AGENTS.md`](AGENTS.md), `.claude/settings.json` 의 `additionalDirectories`, `.claude/cross-review-siblings`, `.gitignore` 에 함께 등록합니다.
 
-> **현재 범위는 Kotlin 3종입니다.** `asp-net-core-skeleton`(공개판 기준 복귀 판정 전)과 `svelte-frontend-skeleton`(이 워크스페이스에 없음)은 **유보** 상태이며, 사유와 복귀 조건은 [`docs/deferred-scope.md`](docs/deferred-scope.md) 에 있습니다. 레포가 형제 위치에 있더라도 이 워크스페이스의 관리·리뷰 범위에서만 빠진 것입니다.
+> **현재 범위는 Kotlin 3종 + ASP.NET Core 1종입니다.** asp-net-core 작업은 당분간 그 레포에서 직접 진행하고, 이 워크스페이스는 등록·크로스리뷰 대상 연결까지만 맡습니다. `svelte-frontend-skeleton`(이 워크스페이스에 없음)은 **유보** 상태이며, 사유와 복귀 조건은 [`docs/deferred-scope.md`](docs/deferred-scope.md) 에 있습니다. 레포가 형제 위치에 있더라도 이 워크스페이스의 관리·리뷰 범위에서만 빠진 것입니다.
 
 ## 관리 대상 스켈레톤
 
@@ -15,6 +15,7 @@
 | `spring-boot-public-api-skeleton` | Kotlin 2.3, Spring Boot 4.1, JDK 21, JPA+JDBC, MapStruct, Flyway, Kotest+MockK+FixtureMonkey | 대외 공개 API 템플릿 |
 | `spring-boot-internal-api-skeleton` | 동일 | 내부 API 템플릿 |
 | `spring-batch-skeleton` | Kotlin 2.3, Spring Boot 4.1, Spring Batch 6.0, Quartz 2.5, Multi-DataSource | 배치 템플릿 |
+| `asp-net-core-skeleton` | .NET · ASP.NET Core, EF Core, Quartz.NET, SPA(Angular 기본·선택형), `dotnet new` 템플릿 | 웹 앱(Server·InternalApi·Batch) + SPA 템플릿 |
 
 ## 스켈레톤을 다룰 때의 전제
 
@@ -36,7 +37,7 @@
 
 ## 프로젝트 구조 (표준 레이아웃)
 
-네 레포를 **동일한 부모 폴더 아래 형제로** 배치합니다. 부모 폴더 이름은 자유 (예: `Git`, `work`, `code`).
+다섯 레포를 **동일한 부모 폴더 아래 형제로** 배치합니다. 부모 폴더 이름은 자유 (예: `Git`, `work`, `code`).
 
 ```
 <any-parent>/
@@ -57,7 +58,8 @@
 │
 ├── spring-boot-public-api-skeleton/              ← 별도 git 레포 (이 레포에서 .gitignore 됨)
 ├── spring-boot-internal-api-skeleton/            ← 별도 git 레포
-└── spring-batch-skeleton/                        ← 별도 git 레포
+├── spring-batch-skeleton/                        ← 별도 git 레포
+└── asp-net-core-skeleton/                        ← 별도 git 레포
 ```
 
 각 레포는 독립적이며 자기 git 히스토리를 갖습니다. Claude Code 는 `SKELETON/.claude/settings.json` 의 `permissions.additionalDirectories` 에 **상대경로**(`../*-skeleton`)로 등록되어 있어, 이 레이아웃을 따라야 모든 머신에서 동일하게 동작합니다.
@@ -66,7 +68,7 @@
 
 ## Workspace Setup
 
-신규 머신 또는 합류자 셋업 — **네 레포가 같은 부모 폴더의 형제가 되도록** clone:
+신규 머신 또는 합류자 셋업 — **다섯 레포가 같은 부모 폴더의 형제가 되도록** clone:
 
 ```bash
 # 부모 폴더는 어디든 무방 (예시: ~/Source/Git)
@@ -79,9 +81,10 @@ git clone https://github.com/firex96/SKELETON.git
 git clone https://github.com/firex96/spring-boot-public-api-skeleton.git
 git clone https://github.com/firex96/spring-boot-internal-api-skeleton.git
 git clone https://github.com/firex96/spring-batch-skeleton.git
+git clone https://github.com/firex96/asp-net-core-skeleton.git   # 원격에 첫 푸시가 된 뒤 유효
 
-# 3) 검증 — 네 폴더가 형제로 보여야 함
-ls -d SKELETON spring-*-skeleton
+# 3) 검증 — 다섯 폴더가 형제로 보여야 함
+ls -d SKELETON spring-*-skeleton asp-net-core-skeleton
 ```
 
 clone 후 첫 Claude Code 세션에서 `additionalDirectories` 가 정상 해석되는지 한 번 확인하세요(형제 레포의 파일 Read 시도).
@@ -95,6 +98,9 @@ clone 후 첫 Claude Code 세션에서 `additionalDirectories` 가 정상 해석
 cd ../spring-boot-public-api-skeleton   && ./gradlew ktlintFormat && ./gradlew build
 cd ../spring-boot-internal-api-skeleton && ./gradlew ktlintFormat && ./gradlew build
 cd ../spring-batch-skeleton             && ./gradlew ktlintFormat && ./gradlew test && ./gradlew integrationTest
+
+# .NET — IntegrationTests 는 Docker 필요. SPA 는 바꾼 src/spa/<클라이언트> 에서 npm ci && npm run build && npm test
+cd ../asp-net-core-skeleton             && dotnet build AspNetCoreSkeletonApplication.slnx && dotnet test --solution AspNetCoreSkeletonApplication.slnx
 ```
 
 - `./gradlew test` = 유닛만(`src/test/unit`). `integrationTest` 는 **Docker 필요**(Testcontainers MySQL). `check` = `ktlint + test + integrationTest`(3종 공통). public/internal API 의 `e2eTest` 는 `docker compose up -d` 선행, `check` 에 묶지 않습니다.

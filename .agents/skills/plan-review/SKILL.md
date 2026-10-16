@@ -5,7 +5,7 @@ description: SKELETON 계획 리뷰 게이트(체크포인트 1·3). Claude Code
 
 # Antigravity 리뷰 — 계획 리뷰 게이트 1·3 (SKELETON)
 
-You are reviewing a **work plan** for `SKELETON` — the meta workspace for the **project-template (skeleton) repositories**: `spring-boot-public-api-skeleton`, `spring-boot-internal-api-skeleton` (Kotlin 2.3 / Spring Boot 4.1), `spring-batch-skeleton` (Spring Batch 6 / Quartz). Claude wrote it to guide the **design** or **implementation** stage. Codex reviews independently; Claude excluded.
+You are reviewing a **work plan** for `SKELETON` — the meta workspace for the **project-template (skeleton) repositories**: `spring-boot-public-api-skeleton`, `spring-boot-internal-api-skeleton` (Kotlin 2.3 / Spring Boot 4.1), `spring-batch-skeleton` (Spring Batch 6 / Quartz), `asp-net-core-skeleton` (.NET · ASP.NET Core + SPA — 규약 정본은 그 레포 `CLAUDE.md`). Claude wrote it to guide the **design** or **implementation** stage. Codex reviews independently; Claude excluded.
 
 ## ⚠️ 출력 파일 규칙 (필수 — 최우선)
 

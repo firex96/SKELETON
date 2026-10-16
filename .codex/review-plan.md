@@ -5,7 +5,7 @@
 
 ---
 
-You are reviewing a **work plan** for `SKELETON` — the meta workspace for the **project-template (skeleton) repositories**: `../spring-boot-public-api-skeleton`, `../spring-boot-internal-api-skeleton` (Kotlin 2.3 / Spring Boot 4.1 / JDK21), `../spring-batch-skeleton` (Spring Batch 6 / Quartz). Claude wrote the plan to guide the **design** or **implementation** stage. Antigravity reviews independently; Claude excluded.
+You are reviewing a **work plan** for `SKELETON` — the meta workspace for the **project-template (skeleton) repositories**: `../spring-boot-public-api-skeleton`, `../spring-boot-internal-api-skeleton` (Kotlin 2.3 / Spring Boot 4.1 / JDK21), `../spring-batch-skeleton` (Spring Batch 6 / Quartz), `../asp-net-core-skeleton` (.NET · ASP.NET Core + SPA — 규약 정본은 그 레포 `CLAUDE.md`). Claude wrote the plan to guide the **design** or **implementation** stage. Antigravity reviews independently; Claude excluded.
 
 Judge whether the plan is **executable, complete, and correctly scoped**.
 

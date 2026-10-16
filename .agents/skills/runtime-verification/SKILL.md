@@ -5,7 +5,7 @@ description: SKELETON 구현 단계 런타임 검증 게이트(체크포인트 4
 
 # Antigravity 리뷰 — 런타임 검증 게이트 4B (SKELETON, Kotlin 3레포)
 
-You are the **runtime-verification gate** for a `SKELETON` change spanning sibling **project-template repositories**: `../spring-boot-public-api-skeleton`, `../spring-boot-internal-api-skeleton`, `../spring-batch-skeleton`. Claude + Codex handle correctness/security; design was judged in ②. **Prove it works by building and running it.** Capture Artifacts.
+You are the **runtime-verification gate** for a `SKELETON` change spanning sibling **project-template repositories**: `../spring-boot-public-api-skeleton`, `../spring-boot-internal-api-skeleton`, `../spring-batch-skeleton`, `../asp-net-core-skeleton`. Claude + Codex handle correctness/security; design was judged in ②. **Prove it works by building and running it.** Capture Artifacts.
 
 ## ⚠️ 출력 파일 규칙 (필수 — 최우선)
 
@@ -27,9 +27,11 @@ You are the **runtime-verification gate** for a `SKELETON` change spanning sibli
    - public-api: `cd ../spring-boot-public-api-skeleton && ./gradlew ktlintFormat && ./gradlew build` (`check` = ktlint + test + integrationTest, `e2eTest` 는 docker compose 선행 후 별도)
    - internal-api: `cd ../spring-boot-internal-api-skeleton && ./gradlew ktlintFormat && ./gradlew build` (동일)
    - batch: `cd ../spring-batch-skeleton && ./gradlew ktlintFormat && ./gradlew test && ./gradlew integrationTest`
+   - asp-net-core: `cd ../asp-net-core-skeleton && dotnet build AspNetCoreSkeletonApplication.slnx && dotnet test --solution AspNetCoreSkeletonApplication.slnx`(IntegrationTests 는 Docker). 바꾼 SPA 는 `src/spa/<클라이언트>` 에서 `npm ci && npm run build && npm test`. 템플릿을 바꿨으면 custom hive 로 `dotnet new` 실생성
    - `integrationTest` 는 **Docker 필요**(Testcontainers MySQL). Docker 부재면 그 사실을 명시하고 유닛 범위까지 판정한다.
 2. **레포별 런타임**
    - **public-api / internal-api** — `./gradlew bootRun` → 변경 엔드포인트 curl/Swagger, 응답 스키마·에러 경로 확인. Flyway 변경 시 폐기 가능한 로컬/격리 DB 에서 validate·migrate.
+   - **asp-net-core** — `docker compose up -d` 후 `ASPNETCORE_ENVIRONMENT=Local` 로 바꾼 앱(`Server`·`InternalApi`·`Batch`)을 기동 → 변경 엔드포인트·화면 확인.
    - **batch** — 스케줄러 기동 후 **Job 수동 트리거** → 결과·재실행 멱등성 확인. Multi-DataSource 라우팅(batch 메타 / business read / business write) 확인.
 3. **회귀** — 인접 엔드포인트/Job/화면이 깨지지 않았는지 실제 확인.
 4. **전파 검증** — 규약 전파 변경이면 **반영한 모든 레포의 빌드·테스트 결과를 각각** 기록한다. 하나라도 미실행이면 그 사실을 명시하고 그 레포는 미검증으로 남긴다.

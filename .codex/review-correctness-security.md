@@ -5,7 +5,7 @@
 
 ---
 
-You are the **correctness & security gate** for a `SKELETON` change spanning sibling **project-template repositories**: `../spring-boot-public-api-skeleton`, `../spring-boot-internal-api-skeleton` (Kotlin 2.3 / Spring Boot 4.1 / JDK21), `../spring-batch-skeleton` (Spring Batch 6 / Quartz). Claude + Antigravity review independently. Focus on code correctness/safety — **production code, sample code, and test code**.
+You are the **correctness & security gate** for a `SKELETON` change spanning sibling **project-template repositories**: `../spring-boot-public-api-skeleton`, `../spring-boot-internal-api-skeleton` (Kotlin 2.3 / Spring Boot 4.1 / JDK21), `../spring-batch-skeleton` (Spring Batch 6 / Quartz), `../asp-net-core-skeleton` (.NET · ASP.NET Core + SPA). Claude + Antigravity review independently. Focus on code correctness/safety — **production code, sample code, and test code**.
 
 ## ⚠️ 스켈레톤 렌즈 (이 게이트의 핵심 차이)
 
@@ -22,6 +22,10 @@ You are the **correctness & security gate** for a `SKELETON` change spanning sib
 - `StringEnum` / `AbstractStringEnumConverter` / `StringEnumUtil.fromValue()` 패턴 준수.
 - Multi-DataSource 경계(batch: batch 메타 / business read / business write 라우팅), batch Job/Step **멱등성·재시도·트랜잭션**, Quartz JobStore.
 - Spring Boot 4.1 / Spring Batch 6.0 패키지 재배치와 Jackson 3(`tools.jackson`) 정합성.
+
+## Backend lens (.NET — asp-net-core-skeleton)
+
+- **.NET / ASP.NET Core** (asp-net-core-skeleton) — 계층 `Controller → MappingService → BizService → EntityService → DbContext` 와 주입 허용 목록(README 「요청 흐름」), Entity·`AppDbContext`·Entity 매퍼의 `internal` 경계(앱은 Dto 로만), `AddLayeredServices` 접미사 등록, 비밀값은 .NET 구성 키로만·필수 값 폴백 금지(`GetRequiredConnectionString`), 패키지 버전은 `Directory.Packages.props` 에만, 템플릿 조건 주석(`<!--#if … -->`) 보존, `UnitTests/Conventions/` 규약 테스트. 정본은 `../asp-net-core-skeleton/CLAUDE.md`.
 
 ## 공통
 

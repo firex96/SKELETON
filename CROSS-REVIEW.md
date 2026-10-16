@@ -1,4 +1,4 @@
-# 크로스 리뷰 워크플로우 — SKELETON (Kotlin 스켈레톤 3레포 워크스페이스)
+# 크로스 리뷰 워크플로우 — SKELETON (스켈레톤 워크스페이스 — Kotlin 3레포 + ASP.NET Core 1레포)
 
 > Claude Code 가 작성·구현·결정적 검증을 담당하고 Codex 가 독립 승인 리뷰를 수행한다.
 > Antigravity 는 계획·설계·코드 승인 리뷰와 **읽기 전용 실패 시나리오 생성자·Major/Critical finding 의 인접 결함 탐색자**로 사용한다.
@@ -25,10 +25,11 @@ SKELETON — **워크스페이스 오케스트레이터**. 실제 코드는 형�
 - `../spring-boot-public-api-skeleton` — Kotlin 2.3 / Spring Boot 4.1 / JDK21 (대외 API 템플릿)
 - `../spring-boot-internal-api-skeleton` — Kotlin 2.3 / Spring Boot 4.1 / JDK21 (내부 API 템플릿)
 - `../spring-batch-skeleton` — Spring Boot 4.1 / Spring Batch 6.0 / Quartz 2.5, Multi-DataSource (배치 템플릿)
+- `../asp-net-core-skeleton` — .NET · ASP.NET Core + SPA, `dotnet new` 템플릿. 작업은 당분간 그 레포에서 진행하고, 이 워크스페이스는 리뷰 대상 해석만 맡는다. 규약 정본은 그 레포 `CLAUDE.md`
 
 관리 대상 판정 기준: **레포명에 `skeleton` 이 붙은 레포.** 산출물(설계 계획·기획서·테스트 시나리오·구현 설계·리뷰 이력·검증 리포트)은 진행 중이면 `plans/ing/{slug}/`, 완료되면 `plans/done/{slug}/` 에 누적(추적). 완료 판정과 이동 규칙은 [`CLAUDE.md`](CLAUDE.md) 「작업 산출물 위치」.
 
-> `asp-net-core-skeleton`·`svelte-frontend-skeleton` 은 **유보** 상태다(사유·복귀 조건: [`docs/deferred-scope.md`](docs/deferred-scope.md)). 크로스리뷰 대상이 아니다.
+> `svelte-frontend-skeleton` 은 **유보** 상태다(사유·복귀 조건: [`docs/deferred-scope.md`](docs/deferred-scope.md)). 크로스리뷰 대상이 아니다.
 
 ## 스켈레톤 특유의 리뷰 전제 (다른 레포와 다른 부분)
 
@@ -45,7 +46,7 @@ SKELETON — **워크스페이스 오케스트레이터**. 실제 코드는 형�
 | 3 | **구현 계획** | 구현_설계(변경 파일·시그니처·DDL·**전파 계획**·테스트 계획) | **R2 + R3** (main 불참) | 양쪽 Approve → `cr-checkpoint3.sh` = `APPROVED` |
 | 4 | **구현 산출물** | ① 코드 ② 테스트 코드 | 코드·보안=**R1+R2+R3** / 런타임=**결정적 검증(R1)** + R3 | 코드 리뷰 PASS + 결정적 검증 PASS + Major 이상 disposition |
 
-**현재 범위(Kotlin 3종)에는 UI 스켈레톤이 없어 UI 산출물(목업·디자인 시스템)은 비활성이다.** 유보된 프론트 스켈레톤이 복귀하면 ② 에 목업·디자인 시스템을 되살린다.
+**UI 산출물(목업)은 asp-net-core SPA 화면을 바꾸는 작업에서만 ② 에 포함한다.** Kotlin 3종에는 UI 가 없다.
 
 ## 왜 역할을 분리하는가
 
@@ -62,7 +63,7 @@ SKELETON — **워크스페이스 오케스트레이터**. 실제 코드는 형�
 2. **결정적으로 스윕한다.** 그 클래스에 대응하는 `rg` 패턴을 **형제 스켈레톤 3개 전부**에 적용하고, 검색 패턴·대상 경로·모든 hit 의 `수정/해당 없음/보류` 판단을 남긴다. 눈으로 훑어 "없는 것 같다"는 근거가 되지 않는다.
 3. **시드와 검증된 형제 지점을 한 패치로 수정**한 뒤 관련 테스트와 재리뷰를 실행한다.
 
-> **이 레포에서 스윕 범위는 기본이 3레포 전체다.** 스켈레톤은 규약을 복제 보유하므로, 한 레포에서 발견된 결함 클래스는 형제에도 있다고 가정하는 편이 사실에 가깝다. 규약 변경·보안 결함이면 이 스켈레톤에서 생성한 기존 파생 프로젝트까지 스윕 범위를 넓히고, 넓히지 않았다면 **그 사실과 사유**를 남긴다.
+> **이 레포에서 스윕 범위는 기본이 Kotlin 3레포 전체다.** 결함 클래스가 언어와 무관하면(인가 누락·비밀값 폴백·계층 우회 등) asp-net-core 도 스윕한다. 스켈레톤은 규약을 복제 보유하므로, 한 레포에서 발견된 결함 클래스는 형제에도 있다고 가정하는 편이 사실에 가깝다. 규약 변경·보안 결함이면 이 스켈레톤에서 생성한 기존 파생 프로젝트까지 스윕 범위를 넓히고, 넓히지 않았다면 **그 사실과 사유**를 남긴다.
 
 후보가 없다고 승인하지 않는다. 근거가 부족하면 리뷰어 결과는 `INCOMPLETE` 이며, main 의 결정적 스윕도 생략하지 않는다.
 
@@ -87,6 +88,7 @@ SKELETON — **워크스페이스 오케스트레이터**. 실제 코드는 형�
 | `spring-boot-public-api-skeleton` | `ktlintFormat` + `build` + `check`(ktlint+test+integrationTest) + `e2eTest`(docker compose 선행) + 변경 엔드포인트 curl/Swagger |
 | `spring-boot-internal-api-skeleton` | 동일 |
 | `spring-batch-skeleton` | `ktlintFormat` + `test` + `integrationTest`(Docker) + **Job 트리거** 확인(스케줄러 기동 후 수동 트리거)·멱등성 |
+| `asp-net-core-skeleton` | `dotnet build` + `dotnet test --solution`(IntegrationTests 는 Docker) + 바꾼 SPA `npm run build`·`npm test` + 변경 엔드포인트 확인 + 템플릿을 바꿨으면 custom hive 로 `dotnet new` 실생성 |
 
 추가 결정적 검증은 변경 표면에 따라 적용한다.
 
@@ -102,13 +104,14 @@ SKELETON — **워크스페이스 오케스트레이터**. 실제 코드는 형�
 cd ../spring-boot-public-api-skeleton   && ./gradlew ktlintFormat && ./gradlew build
 cd ../spring-boot-internal-api-skeleton && ./gradlew ktlintFormat && ./gradlew build
 cd ../spring-batch-skeleton             && ./gradlew ktlintFormat && ./gradlew test && ./gradlew integrationTest
+cd ../asp-net-core-skeleton             && dotnet build AspNetCoreSkeletonApplication.slnx && dotnet test --solution AspNetCoreSkeletonApplication.slnx
 ```
 
 `integrationTest` 는 Docker 필요(Testcontainers MySQL). 변경한 레포만 돌린다 — 단, **규약 전파 변경은 반영한 레포를 전부** 돌린다.
 
 ## 핵심 규칙 (리뷰 시 참고)
 
-[`AGENTS.md`](AGENTS.md) §핵심 규칙 과 동일하며, 그쪽이 정본이다. 요약: 명명 규칙(Enum 접미사 없음 / `Configuration` 접미사 / 명시적 DataSource 이름 / `enums/` 패키지) · 약어 금지 · 레이어드 계층 우회 금지 · Model/DTO/Entity 분리 · 1 Class per 1 File · 클래스 레벨 `@Transactional(readOnly = true)` · Spring Boot 4.1/Batch 6.0 패키지 재배치 · Jackson 3 · 설정값·비밀값은 kebab-case 논리 키 참조(환경변수 또는 aws·azure·gcp 출처 프로필, 비밀은 기본값 없음, 예외 둘) · 식별자 `Long`/`BIGINT` · 업무 DDL FK 제약 금지 · Model `@field:JsonProperty` 전수·생성자 매핑(전부-기본값 금지) — 정본은 각 스켈레톤 `.claude/rules/conventions.md`.
+[`AGENTS.md`](AGENTS.md) §핵심 규칙 과 동일하며, 그쪽이 정본이다. 요약: 명명 규칙(Enum 접미사 없음 / `Configuration` 접미사 / 명시적 DataSource 이름 / `enums/` 패키지) · 약어 금지 · 레이어드 계층 우회 금지 · Model/DTO/Entity 분리 · 1 Class per 1 File · 클래스 레벨 `@Transactional(readOnly = true)` · Spring Boot 4.1/Batch 6.0 패키지 재배치 · Jackson 3 · 설정값·비밀값은 kebab-case 논리 키 참조(환경변수 또는 aws·azure·gcp 출처 프로필, 비밀은 기본값 없음, 예외 둘) · 식별자 `Long`/`BIGINT` · 업무 DDL FK 제약 금지 · Model `@field:JsonProperty` 전수·생성자 매핑(전부-기본값 금지) — 정본은 각 스켈레톤 `.claude/rules/conventions.md`. .NET 규칙의 정본은 `../asp-net-core-skeleton/CLAUDE.md`.
 
 ## 티어링 (효율 밸브)
 
