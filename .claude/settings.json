@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "../spring-boot-public-api-skeleton",
+      "../spring-boot-internal-api-skeleton",
+      "../spring-batch-skeleton"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-exit-plan-checkpoint3.sh\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-edit-checkpoint3-gate.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

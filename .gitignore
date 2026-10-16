@@ -1,0 +1,27 @@
+.obsidian
+.DS_Store
+**/.DS_Store
+
+# Claude Code local settings
+.claude/settings.local.json
+.claude/*.lock
+
+# 크로스리뷰 원문 아티팩트 (로컬 비추적 — 대용량 전사·시크릿 echo 가능성)
+.claude/review-out
+
+# 비밀값은 환경변수·비밀값 출처 프로필로만 준다(설정값·비밀값 규약). 로컬 비밀 파일을
+# 만들더라도 추적되지 않게 하는 안전망이다.
+**/application-local-secret.yml
+**/application-*-secret.yml
+.playwright-mcp
+
+# 관리 대상 스켈레톤 레포는 별도 sibling clone 으로 관리(이 계획/문서 메타 레포 밖).
+# .claude/settings.json 의 additionalDirectories 와 .claude/cross-review-siblings 로 참조한다. standalone clone 을
+# 실수로 SKELETON 안에 만들었을 때 추적 방지:
+/spring-boot-public-api-skeleton
+/spring-boot-internal-api-skeleton
+/spring-batch-skeleton
+
+# 파이썬 바이트코드 — 리뷰 컨텍스트를 바이너리로 오염시킨다
+__pycache__/
+*.pyc

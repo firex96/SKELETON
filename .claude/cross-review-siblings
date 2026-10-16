@@ -1,0 +1,7 @@
+# 크로스리뷰 대상 저장소 — 글로벌 ~/.claude/scripts/cr-targets.sh 의 내장 테이블보다 우선한다.
+# 한 줄에 경로 하나, '.' = 이 레포 자신(형제 스윕 근거가 plans/ 에 있어 ④ 리뷰의 필수 입력이다).
+# 새 스켈레톤을 관리 대상에 넣으면 CLAUDE.md·AGENTS.md·README.md·.claude/settings.json 과 함께 여기에 등록한다.
+.
+../spring-boot-public-api-skeleton
+../spring-boot-internal-api-skeleton
+../spring-batch-skeleton
