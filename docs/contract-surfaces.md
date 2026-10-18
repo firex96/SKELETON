@@ -122,6 +122,17 @@
 | 메일 발송 포트 | public | UserSelfBizServiceMailTest | unit | mailSender / RAW-1 / shouldThrow | yes | |
 | auth 트랜잭션 매니저 바인딩(실제 DB) | public | AuthTransactionBindingIntegrationTest | integration | authTransactionManager / setRollbackOnly / removeUserFromGroup | yes | |
 | OAuth2 리다이렉트 검증(HTTP) | public | OAuth2AuthorizationE2ETest | e2e | invalid_request / access_denied / refresh_token | yes | |
+| 소셜 state 검증·1회 소비(브라우저 세션 결합, GETDEL) | public | SocialBrowserLoginIntegrationTest | integration | invalid_state / SKELETON_SESSION / callbackWithState | yes | |
+| 소셜 콜백 토큰 쿼리 금지·세션 교환 1회 | public | SocialBrowserLoginIntegrationTest | integration | assertNoTokenInLocation / postSessionToken / exactly one | yes | |
+| 401·403 단일 형식(필터 체인·메서드 보안 모두 ErrorResponseModel) | public | ErrorResponseFormatE2ETest | e2e | FORBIDDEN_ERROR / UNAUTHORIZED_ERROR / divisionCode | yes | |
+| 인가 브라우저 흐름(로그인·동의 화면, 세션 인증) | public | OAuth2AuthorizationE2ETest | e2e | authorizeViaBrowser / submitConsent / access_denied | yes | |
+| 토큰 엔드포인트 클라이언트 인증(시크릿 필수·basic·post) | public | OAuth2AuthorizationE2ETest | e2e | tokenRequest / WWW-Authenticate / invalid_client | yes | |
+| 일괄 세션 폐기 뒤 토큰 즉시 무효(캐시 제거) | public | SessionOwnershipE2ETest | e2e | loginAgain / otherDevice / UNAUTHORIZED | yes | |
+| 폐기 세션 캐시 경쟁 차단(커밋 뒤 표식 먼저·표식 없을 때만 캐시 쓰기) | public | SessionCacheRevocationTest | unit | session:revoked: / afterCommit / verifyOrder | yes | |
+| 폐기 표식 조건부 캐시 쓰기(실제 Redis 클러스터·해시 태그) | public | SessionCacheRevocationIntegrationTest | integration | cacheSessionUnlessRevoked / staleReadBeforeRevocation / evictRevokedSessions | yes | |
+| 토큰 scope 확대 금지(refresh·client_credentials) | public | OAuth2AuthorizationE2ETest | e2e | widened / openid admin / invalid_scope | yes | |
+| email_verified 실제 판정(세 응답 경로) | public | EmailVerifiedE2ETest | e2e | email_verified / profileEmailVerified / requestVerificationTwice | yes | |
+| discovery 광고 정합(광고값마다 실제 동작·클레임 일치) | public | DiscoveryConformanceE2ETest | e2e | response_types_supported / token_endpoint_auth_methods_supported / claims_supported | yes | |
 | Job 재실행 멱등 | batch | SampleJobRerunIntegrationTest | integration | readCount / writeCount / processedAt | yes | |
 | 미해석 플레이스홀더 fail-fast | 3 | UnresolvedPlaceholderGuardTest | unit | Config resource / findUnresolved / IllegalStateException | yes | |
 | 미해석 플레이스홀더 fail-fast 기동 경로(spring.factories) | 3 | UnresolvedPlaceholderGuardBootIntegrationTest | integration | SpringApplication / guardprobe / no-such-secret-for-guard-probe | yes | |
