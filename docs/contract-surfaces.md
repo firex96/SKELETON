@@ -133,6 +133,21 @@
 | 토큰 scope 확대 금지(refresh·client_credentials) | public | OAuth2AuthorizationE2ETest | e2e | widened / openid admin / invalid_scope | yes | |
 | email_verified 실제 판정(세 응답 경로) | public | EmailVerifiedE2ETest | e2e | email_verified / profileEmailVerified / requestVerificationTwice | yes | |
 | discovery 광고 정합(광고값마다 실제 동작·클레임 일치) | public | DiscoveryConformanceE2ETest | e2e | response_types_supported / token_endpoint_auth_methods_supported / claims_supported | yes | |
+| 2차 인증 게이트(켠 계정은 API·인가 서버 로그인 모두 세션 전에 challenge) | public | MfaE2ETest | e2e | browserAtSecondStep / HttpStatus.ACCEPTED / mfaToken / expireChallengesOf | yes | |
+| 2차 인증 게이트(소셜 네이티브 202·콜백은 2단계 화면, 통과 전 토큰 교환 401) | public | SocialBrowserLoginIntegrationTest | integration | MFA_PROVIDER_ID / statusCode() shouldBe 202 / mfaCodes.next() | yes | |
+| 2단계 코드 재사용 방지·challenge 1회 소비(같은 TOTP·서로 다른 복구 코드 동시) | public | MfaChallengeIntegrationTest | integration | results.count { it.isSuccess } shouldBe 1 / MfaMethod.RECOVERY / MFA_CHALLENGE_INVALID | yes | |
+| 2단계 실패의 계정 잠금 공유(1단계 성공은 카운터를 지우지 않음·잠금이 코드보다 먼저) | public | MfaChallengeIntegrationTest | integration | getCurrentAttempts(user.loginId) shouldBe 3 / shouldThrow<AccountLockedException> | yes | |
+| TOTP 계산(RFC 6238 부록 B 벡터·±1 구간) | public | TotpTest | unit | 287082 / 353130 / matchStep | yes | |
+| TOTP 시크릿 암호화(AES-GCM·사용자 AAD·변조 거부) | public | MfaSecretCipherTest | unit | decrypt(8L, stored) / ByteArray(16) | yes | |
+| 관리자 2차 인증 초기화(세션 전부 폐기·없으면 404) | public | MfaE2ETest | e2e | deleteWithAuth / superAdminToken / HttpStatus.NOT_FOUND | yes | |
+| id_token auth_time 은 로그인 시각(직접 발급·동의 후 발급) | public | AuthTimeE2ETest | e2e | auth_time / loginFrom / authTime + 2 | yes | |
+| 비밀번호 로그인 감사(성공·실패) | public | LoginAuditE2ETest | e2e | LOGIN_FAILURE / LOGIN_SUCCESS / INVALID_CREDENTIALS | yes | |
+| 소셜 로그인의 차단 IP·계정 잠금 | public | SocialAuthBizServiceLoginProtectionTest | unit | shouldThrow<AccountLockedException> / shouldThrow<ForbiddenException> / recordFailedAttempt | yes | |
+| 비밀번호 변경 뒤 다른 세션 폐기(/user/password/change) | public | UserSelfBizServicePasswordChangeTest | unit | PASSWORD_CHANGED_REASON / userSessionRevocationBizService.revokeAll | yes | |
+| 세션 일괄 폐기 규칙(폐기 전에 모은 ID 만 폐기·같은 목록으로 캐시 제거) | public | UserSessionRevocationBizServiceTest | unit | exceptSessionId / evictRevokedSessions(listOf("phone", "laptop"), 7) | yes | |
+| 1단계 출구의 관문(2차 인증 켜짐은 challenge 만·꺼짐은 출처별 카운터 정리) | public | MfaChallengeBizServiceGatewayTest | unit | afterFirstFactor / clearAttempts = true / clearAttempts = false | yes | |
+| 인증 완료 지점(카운터 정리 여부·소셜 여부로 성공 감사 선택) | public | LoginCompletionBizServiceTest | unit | logSocialLoginSuccess / logLoginSuccess / clearAttempts = false | yes | |
+| 읽지 못하는 세션 캐시는 DB 로 다시 읽음(배포 전 형식) | public | SessionCacheRevocationTest | unit | SR-L / redisTemplate.delete("session:{s1}") | yes | |
 | Job 재실행 멱등 | batch | SampleJobRerunIntegrationTest | integration | readCount / writeCount / processedAt | yes | |
 | 미해석 플레이스홀더 fail-fast | 3 | UnresolvedPlaceholderGuardTest | unit | Config resource / findUnresolved / IllegalStateException | yes | |
 | 미해석 플레이스홀더 fail-fast 기동 경로(spring.factories) | 3 | UnresolvedPlaceholderGuardBootIntegrationTest | integration | SpringApplication / guardprobe / no-such-secret-for-guard-probe | yes | |
