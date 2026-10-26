@@ -74,6 +74,7 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 - `util/` · `config/` · `exception/` 의 공통 클래스, `StringEnum`/`AbstractStringEnumConverter` 패턴
 - 각 레포 `.claude/rules/conventions.md` 의 「데이터베이스」「타입 선언」 두 절과 「환경 설정」 아래 「설정값·비밀값 규약」 하위 절 — 3곳 동일 (`section` 표면)
 - `config/MapstructConfiguration.kt`(`unmappedTargetPolicy = ERROR`) — 3곳 동일, `persistence/jdbc/entity/main/ProductJdbcEntity.kt` — public·internal 2곳 동일 (`full` 표면. batch 는 같은 엔티티를 `sub/` 에 둔다)
+- `exception/` 의 `CodedException.kt`·`ClientBadRequestException.kt`·`ItemNotFoundException.kt`·`InvalidRequestParameterException.kt`·`ApiCallException.kt` — public·internal 2곳 동일 (`full` 표면. batch 는 `ErrorCode`·응답 모델 모양이 달라 규약만 같다)
 
 **규칙:** 공통 표면을 고쳤으면 **같은 작업 안에서** 형제 스켈레톤 전부를 `rg` 로 스윕하고, hit 별로 `반영 / 해당 없음 / 보류(사유)` 를 남긴다.
 
@@ -156,6 +157,7 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 - **Model / DTO / Entity 분리** — Entity 는 상위 계층에 노출 금지. 변환은 MapStruct.
 - **트랜잭션** — 클래스 레벨 `@Transactional(readOnly = true)` 기본, 변경 메서드에만 `@Transactional`. **모든 `@Transactional` 에 `transactionManager` 명시(primary 포함)** — 데이터소스가 여럿이라 묵시는 primary 로 가고, 다른 데이터소스의 리포지토리는 그 트랜잭션 밖에서 돈다(`@Modifying` 예외·파생 `deleteBy…` 조용한 무효·커넥션 2개). 경계는 BizService·EntityService(MappingService 금지). 검출 `TransactionManagerConventionTest`(3레포). **`@Async` 도 같은 프록시 규칙** — 같은 클래스 안 호출은 동기로 돈다. 비동기는 별도 빈(`ExampleAsyncProxyWorker`)으로. 검출 `AsyncSelfInvocationConventionTest`(public·internal).
 - **String Enum** — `StringEnum` 인터페이스 + `AbstractStringEnumConverter`(JPA) + `StringEnumUtil.fromValue()`.
+- **예외** — 업무 예외는 `CodedException` 을 상속하고 HTTP 상태·구분 코드는 `ErrorCode` 하나가 정한다. 핸들러는 `CodedException` 하나로 받고, 응답 본문 모양이나 노출 정책이 다른 예외만 전용 핸들러를 둔다(batch `ForbiddenException`·`InvalidJobParameterException`). 검출 `ErrorCodeContractTest`(3레포)·`ErrorResponseContractIntegrationTest`(public·internal).
 
 ### .NET (asp-net-core-skeleton)
 

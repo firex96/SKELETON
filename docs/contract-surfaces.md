@@ -51,6 +51,11 @@
 | UnresolvedPlaceholderGuard | config/UnresolvedPlaceholderGuard.kt | 3 | full | |
 | MapstructConfiguration | config/MapstructConfiguration.kt | 3 | full | |
 | ProductJdbcEntity | persistence/jdbc/entity/main/ProductJdbcEntity.kt | public internal | full | |
+| CodedException | exception/CodedException.kt | public internal | full | |
+| ClientBadRequestException | exception/ClientBadRequestException.kt | public internal | full | |
+| ItemNotFoundException | exception/ItemNotFoundException.kt | public internal | full | |
+| InvalidRequestParameterException | exception/InvalidRequestParameterException.kt | public internal | full | |
+| ApiCallException | exception/ApiCallException.kt | public internal | full | |
 | AbstractBlankStringEnumConverter | converter/AbstractBlankStringEnumConverter.kt | 3 | full | |
 | AbstractDefaultStringEnumConverter | converter/AbstractDefaultStringEnumConverter.kt | 3 | full | |
 | KotestProjectConfig(unit) | src/test/unit/kotlin/<BASE>/config/KotestUnitProjectConfig.kt@extensions | 3 | props | |
@@ -94,6 +99,9 @@
 | Redis 캐시 직렬화 계약 | public internal | RedisCacheSerializerFactoryTest | unit | PolymorphicTypeValidator | yes | |
 | Redis 캐시 빈 배선 | public internal | RedisCacheManagerWiringIntegrationTest | integration | RedisCacheManager / getBean | yes | |
 | 오류 응답 계약 | public internal | ErrorResponseContractIntegrationTest | integration | divisionCode / resultMessage | yes | |
+| ErrorCode 상태·구분 코드 불변식 | 3 | ErrorCodeContractTest | unit | ErrorCode.entries / shouldBeInRange | yes | |
+| 본문 status 와 HTTP 상태 일치 | public internal | ErrorResponseContractIntegrationTest | integration | SERVICE_UNAVAILABLE_ERROR / G016 | yes | |
+| batch CodedException 단일 핸들러 | batch | GlobalExceptionHandlerTest | unit | COMMON_002 / BATCH_001 | yes | |
 | WebClientUtil 동작 계약 | 3 | WebClientUtilTest | unit | NonRetryableException / RetryableException | yes | |
 | Job 트리거 인가 | batch | JobTriggerAuthorizerTest | unit | allowedJobs / ForbiddenException / InvalidJobParameterException | yes | |
 | Job 트리거 인가(경로) | batch | JobTriggerAuthorizationIntegrationTest | integration | AUTH_001 / AUTH_002 / isUnauthorized | yes | |
