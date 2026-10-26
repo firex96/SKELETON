@@ -11,6 +11,7 @@
 #   ④ 공통 코드가 아닌 구분 코드는 「스택 전용 코드」 표에 예약돼 있어야 한다
 #   ⑤ 파싱한 항목 수가 원본의 항목 수와 같다(줄바꿈된 항목이 조용히 빠지지 않게)
 #   ⑥ public·internal 에 함께 있는 이름은 Kotlin 전용 코드라도 status·구분 코드·제목이 같다
+#   ⑦ 「공통 코드」의 구분 코드는 「스택 전용 코드」 예약 목록에 없다(공통으로 옮긴 코드의 예약이 남지 않게)
 #
 # exit 0 = 일치 / 1 = 위반 / 2 = 입력 파일 없음
 # 입력 경로를 환경변수로 바꿀 수 있다(음성 확인용):
@@ -125,6 +126,9 @@ check_count asp "$(grep -cE 'public static readonly ErrorCode [A-Za-z][A-Za-z0-9
     }
     for (d in divName) if (!(d in commonDiv) && !(d in reserved)) {
       printf "\n  예약되지 않은 구분 코드: %s (%s) — docs/error-codes.md 「스택 전용 코드」에 예약한다\n", d, divName[d]; failed = 1
+    }
+    for (d in commonDiv) if (d in reserved) {
+      printf "\n  공통 코드가 예약 목록에도 있다: %s — 공통이 되었으면 「스택 전용 코드」에서 지운다\n", d; failed = 1
     }
     printf "\n%s\n", failed ? "RESULT: MISMATCH" : "RESULT: OK"
     exit failed ? 1 : 0
