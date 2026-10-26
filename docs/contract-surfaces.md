@@ -56,6 +56,7 @@
 | ItemNotFoundException | exception/ItemNotFoundException.kt | public internal | full | |
 | InvalidRequestParameterException | exception/InvalidRequestParameterException.kt | public internal | full | |
 | ApiCallException | exception/ApiCallException.kt | public internal | full | |
+| ErrorReason | handler/ErrorReason.kt | public internal | full | |
 | AbstractBlankStringEnumConverter | converter/AbstractBlankStringEnumConverter.kt | 3 | full | |
 | AbstractDefaultStringEnumConverter | converter/AbstractDefaultStringEnumConverter.kt | 3 | full | |
 | KotestProjectConfig(unit) | src/test/unit/kotlin/<BASE>/config/KotestUnitProjectConfig.kt@extensions | 3 | props | |
@@ -102,6 +103,9 @@
 | ErrorCode 상태·구분 코드 불변식 | 3 | ErrorCodeContractTest | unit | ErrorCode.entries / shouldBeInRange | yes | |
 | 본문 status 와 HTTP 상태 일치 | public internal | ErrorResponseContractIntegrationTest | integration | SERVICE_UNAVAILABLE_ERROR / G016 | yes | |
 | batch CodedException 단일 핸들러 | batch | GlobalExceptionHandlerTest | unit | COMMON_002 / BATCH_001 | yes | |
+| 응답 문구 사용자 문장 | public internal | ErrorResponseContractIntegrationTest | integration | MALFORMED_BODY / bodyHasNoInternals | yes | |
+| 테스트 소스셋 1 Class per 1 File | 3 | OneClassPerFileConventionTest | unit | OC-5 / OC-6 / MIN_TEST | yes | |
+| batch 없는 실행 조회 404 | batch | JobExecutionNotFoundIntegrationTest | integration | JOB_002 / jobExecutionId | yes | |
 | WebClientUtil 동작 계약 | 3 | WebClientUtilTest | unit | NonRetryableException / RetryableException | yes | |
 | Job 트리거 인가 | batch | JobTriggerAuthorizerTest | unit | allowedJobs / ForbiddenException / InvalidJobParameterException | yes | |
 | Job 트리거 인가(경로) | batch | JobTriggerAuthorizationIntegrationTest | integration | AUTH_001 / AUTH_002 / isUnauthorized | yes | |

@@ -81,6 +81,7 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 |---|---|---|
 | **A 발산 탐지** | 형제가 **서로 달라진 것** | `bash scripts/sibling-diff.sh` — 발산 있으면 exit 1 |
 | **B 복제 결함 탐지** | 형제가 **셋 다 똑같이 틀린 것** | `bash scripts/contract-coverage.sh --repo <public\|internal\|batch>` — 규약 표면에 그것을 지나가는 테스트가 있는지. 없거나 **실행되지 않으면** FAIL. public·internal 은 e2e 때문에 그 레포의 `docker compose up -d` 를 먼저 띄운다(세 compose 가 같은 호스트 포트를 써서 레포마다 하나씩 돌린다). 6379 를 다른 컨테이너가 쓰고 있으면 `REDIS_PORT=6380 docker compose up -d` 처럼 바꿔 띄우고, 실행할 때도 같은 값을 준다(`REDIS_PORT=6380 bash scripts/contract-coverage.sh --repo public`) — compose 포트와 `local` 프로필의 `redis-port` 가 둘 다 이 변수를 읽는다 |
+| **스택 간 오류 코드 대조** | public·internal·asp 가 **같은 이름의 오류 코드를 다른 값으로** 쓰는 것 | `bash scripts/error-code-parity.sh` — 정본 [`docs/error-codes.md`](docs/error-codes.md) 「공통 코드」와 세 스택의 `ErrorCode` 를 대조한다(status·구분 코드·제목, 구분 코드 충돌). 어긋나면 exit 1. batch 는 코드 체계가 달라 대상이 아니다 |
 
 정본 표는 [`docs/contract-surfaces.md`](docs/contract-surfaces.md) 다.
 
@@ -90,7 +91,7 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 
 형제 동기화는 장치 A·B 와 `rg` 스윕으로만 한다 — 파일을 복사하는 스크립트는 「셋 다 똑같이 틀린 것」을 퍼뜨리는 도구라 두지 않는다.
 
-**장치 A·B 와 복제 표면은 Kotlin 3종 전용이다.** `asp-net-core-skeleton` 은 같은 규약 계열(계층 `Controller → MappingService → BizService → EntityService`, 비밀값 출처 프로필, 테스트 3분류)이지만 언어가 달라 파일 대조 대상이 아니다. 규약을 개념 수준에서 바꾸는 변경이면 asp-net-core 를 **수동 대조 대상**으로 계획에 적고, 반영 여부를 hit 판정과 같은 형식(`반영 / 해당 없음 / 보류(사유)`)으로 남긴다.
+**장치 A·B 와 복제 표면은 Kotlin 3종 전용이다.** `asp-net-core-skeleton` 은 같은 규약 계열(계층 `Controller → MappingService → BizService → EntityService`, 비밀값 출처 프로필, 테스트 3분류)이지만 언어가 달라 파일 대조 대상이 아니다. 규약을 개념 수준에서 바꾸는 변경이면 asp-net-core 를 **수동 대조 대상**으로 계획에 적고, 반영 여부를 hit 판정과 같은 형식(`반영 / 해당 없음 / 보류(사유)`)으로 남긴다. 예외로 오류 코드는 스택 간 오류 코드 대조 스크립트(`scripts/error-code-parity.sh`)가 asp 까지 기계적으로 대조한다.
 
 ## 작업 산출물 위치 (plans/)
 
@@ -154,7 +155,7 @@ Kotlin 3종(`public-api` / `internal-api` / `batch`)은 같은 규약을 **각�
 - **Model / DTO / Entity 분리** — Entity 는 상위 계층에 노출 금지. 변환은 MapStruct.
 - **트랜잭션** — 클래스 레벨 `@Transactional(readOnly = true)` 기본, 변경 메서드에만 `@Transactional`. **모든 `@Transactional` 에 `transactionManager` 명시(primary 포함)** — 데이터소스가 여럿이라 묵시는 primary 로 가고, 다른 데이터소스의 리포지토리는 그 트랜잭션 밖에서 돈다(`@Modifying` 예외·파생 `deleteBy…` 조용한 무효·커넥션 2개). 경계는 BizService·EntityService(MappingService 금지). 검출 `TransactionManagerConventionTest`(3레포). **`@Async` 도 같은 프록시 규칙** — 같은 클래스 안 호출은 동기로 돈다. 비동기는 별도 빈(`ExampleAsyncProxyWorker`)으로. 검출 `AsyncSelfInvocationConventionTest`(public·internal).
 - **String Enum** — `StringEnum` 인터페이스 + `AbstractStringEnumConverter`(JPA) + `StringEnumUtil.fromValue()`.
-- **예외** — 업무 예외는 `CodedException` 을 상속하고 HTTP 상태·구분 코드는 `ErrorCode` 하나가 정한다. 핸들러는 `CodedException` 하나로 받고, 응답 본문 모양이나 노출 정책이 다른 예외만 전용 핸들러를 둔다(batch `ForbiddenException`·`InvalidJobParameterException`). 검출 `ErrorCodeContractTest`(3레포)·`ErrorResponseContractIntegrationTest`(public·internal).
+- **예외** — 업무 예외는 `CodedException` 을 상속하고 HTTP 상태·구분 코드는 `ErrorCode` 하나가 정한다. 핸들러는 `CodedException` 하나로 받고, 응답 본문 모양이나 노출 정책이 다른 예외만 전용 핸들러를 둔다(batch `InvalidJobParameterException`). 오류 응답의 문구 필드(public·internal `reason`·`resultMessage`, batch `message`·`details`)에는 사용자에게 보여도 되는 문장만 싣는다 — 업무 예외 4xx 는 예외 메시지(하위 예외·외부 응답 문구를 합치지 않는다), 검증 실패는 필드별 검증 메시지, 그 밖은 고정 문장이고 내부 상세는 로그에 남긴다. 스택 공통 코드는 [`docs/error-codes.md`](docs/error-codes.md) 가 정본이다. 검출 `ErrorCodeContractTest`(3레포)·`ErrorResponseContractIntegrationTest`(public·internal)·`scripts/error-code-parity.sh`.
 
 ### .NET (asp-net-core-skeleton)
 

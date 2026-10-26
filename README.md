@@ -122,6 +122,7 @@ cd ../asp-net-core-skeleton             && dotnet build AspNetCoreSkeletonApplic
 | `.agents/skills/*/SKILL.md` | Antigravity 리뷰 루브릭 (계획 / 설계 / 코드 / 런타임) |
 | `plans/ing/{slug}/` | **진행 중** 작업의 기획·구현·검증 산출물. 새 작업은 여기서 시작하고, 게이트 명령도 이 경로를 인자로 받습니다 (`/cross-review ing/{slug}`) |
 | `plans/done/{slug}/` | **완료** 작업. 검증 리포트가 있고 · 관련 커밋이 대상 브랜치에 들어갔고 · 미결 항목이 없거나 티켓으로 이관됐을 때 `git mv` 로 옮기며, `docs/`·루트 지침의 링크를 같은 커밋에서 갱신합니다 (이동한 문서 내부의 옛 경로는 기록으로 둡니다) |
+| [`docs/error-codes.md`](docs/error-codes.md) | 스택 공통 오류 코드표(정본) — public·internal·asp 가 같은 이름·status·구분 코드·제목을 쓴다. 대조는 `bash scripts/error-code-parity.sh` |
 | [`docs/deferred-scope.md`](docs/deferred-scope.md) | 관리 범위에서 유보한 스켈레톤 — 사유·확인된 사실·복귀 조건 |
 | [`docs/mapstruct-kotlin-constructor-mapping.md`](docs/mapstruct-kotlin-constructor-mapping.md) | MapStruct × Kotlin data class — `val` 이 조용히 비는 조건(전부 기본값 → no-arg 생성자), 규약, 검출 테스트 |
 | `docs/` | 안정적인 정책·아키텍처 문서 |
