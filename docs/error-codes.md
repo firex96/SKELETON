@@ -18,6 +18,11 @@ API 스켈레톤(public-api · internal-api · asp-net-core)이 함께 쓰는 �
 | CONFLICT_ERROR | 409 | G013 | Conflict |
 | EXTERNAL_API_ERROR | 502 | G014 | Bad Gateway |
 | UNAUTHORIZED_ERROR | 401 | G015 | Unauthorized |
+| SERVICE_UNAVAILABLE_ERROR | 503 | G016 | Service Unavailable |
+| METHOD_NOT_ALLOWED_ERROR | 405 | G017 | Method Not Allowed |
+| NOT_ACCEPTABLE_ERROR | 406 | G018 | Not Acceptable |
+| PAYLOAD_TOO_LARGE_ERROR | 413 | G019 | Payload Too Large |
+| UNSUPPORTED_MEDIA_TYPE_ERROR | 415 | G020 | Unsupported Media Type |
 | ACCOUNT_LOCKED_ERROR | 423 | AUTH001 | Account Locked |
 | INTERNAL_SERVER_ERROR | 500 | G999 | Internal Server Error |
 
@@ -27,8 +32,8 @@ internal-api 는 인증이 없어 `CONFLICT_ERROR`·`UNAUTHORIZED_ERROR`·`ACCOU
 
 | 스택 | 구분 코드 |
 |---|---|
-| Kotlin (public·internal) | G002 · G003 · G004 · G005 · G006 · G007 · G010 · G012 · G016 |
+| Kotlin (public·internal) | G002 · G003 · G004 · G005 · G006 · G007 · G010 · G012 |
 | Kotlin public | MFA001 ~ MFA006 |
 | asp-net-core | AUTH002 ~ AUTH006 |
 
-정본 값의 이력: Kotlin public 의 `UNAUTHORIZED_ERROR`(G007A → G015)·`CONFLICT_ERROR`(G008A → G013)를 asp 값에 맞추고 제목을 asp 제목으로 통일했다(오류 응답 정리 2차 작업, 2026-10-26).
+정본 값의 이력: Kotlin public 의 `UNAUTHORIZED_ERROR`(G007A → G015)·`CONFLICT_ERROR`(G008A → G013)를 asp 값에 맞추고 제목을 asp 제목으로 통일했다(오류 응답 정리 2차 작업, 2026-10-26). 프레임워크가 정하는 상태(405·406·413·415·503)의 코드 G016~G020 을 공통 코드로 두었다 — Kotlin 은 처리하지 않는 Spring 예외를, asp 는 상태 코드 응답을 이 코드로 응답한다(오류 응답 정리 3차 작업, 2026-10-26).

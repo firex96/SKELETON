@@ -106,6 +106,9 @@
 | 응답 문구 사용자 문장 | public internal | ErrorResponseContractIntegrationTest | integration | MALFORMED_BODY / bodyHasNoInternals | yes | |
 | 테스트 소스셋 1 Class per 1 File | 3 | OneClassPerFileConventionTest | unit | OC-5 / OC-6 / MIN_TEST | yes | |
 | batch 없는 실행 조회 404 | batch | JobExecutionNotFoundIntegrationTest | integration | JOB_002 / jobExecutionId | yes | |
+| 프레임워크 상태 응답 | public internal | FrameworkStatusResponseIntegrationTest | integration | METHOD_NOT_ALLOWED_ERROR / UNSUPPORTED_MEDIA_TYPE_ERROR | yes | |
+| batch 프레임워크 상태 응답 | batch | GlobalExceptionHandlerTest | unit | COMMON_004 / COMMON_007 | yes | |
+| batch 실행 조회 경로 | batch | JobExecutionLookupConventionTest | unit | JE-1 / requireJobExecution | yes | |
 | WebClientUtil 동작 계약 | 3 | WebClientUtilTest | unit | NonRetryableException / RetryableException | yes | |
 | Job 트리거 인가 | batch | JobTriggerAuthorizerTest | unit | allowedJobs / ForbiddenException / InvalidJobParameterException | yes | |
 | Job 트리거 인가(경로) | batch | JobTriggerAuthorizationIntegrationTest | integration | AUTH_001 / AUTH_002 / isUnauthorized | yes | |
